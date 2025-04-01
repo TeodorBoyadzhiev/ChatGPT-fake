@@ -7,6 +7,8 @@ import Homepage from './routes/landingPage/LandingPage';
 import RootLayout from './layouts/rootLayout/RootLayout';
 import DashboardLayout from './layouts/dashboardLayout/DashboardLayout';
 import DashboardPage from './routes/dashboardPage/DashboardPage';
+import SignInPage from './routes/signInPage/SignInPage';
+import SignUpPage from './routes/signUpPage/SignUpPage';
 
 let router = createBrowserRouter([
   {
@@ -15,6 +17,14 @@ let router = createBrowserRouter([
       {
         path: "/",
         element: <Homepage />
+      },
+      {
+        path: "/sign-in",
+        element: <SignInPage />
+      },
+      {
+        path: "/sign-up",
+        element: <SignUpPage />
       },
       {
         element: <DashboardLayout />,
