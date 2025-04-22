@@ -19,7 +19,6 @@ const RootLayout = () => {
                   <img src="/logo.png" alt="" />
                   <span>ChatGPT(fake)</span>
               </Link>
-              <div className="user">User</div>
               <SignedIn>
                 <UserButton />
               </SignedIn>
