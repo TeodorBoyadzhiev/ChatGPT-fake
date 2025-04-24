@@ -5,6 +5,10 @@ import cors from "cors";
 const port = process.env.PORT || 3000;
 const app = express();
 
+app.use(cors({
+  origin: "http://127.0.0.1:5173",
+}));
+
 // SDK initialization
 
 
@@ -23,3 +27,5 @@ app.listen(port, () => {
 //   connect();
   console.log("Server running on 3000");
 });
+
+console.log(process.env.IMAGE_KIT_ENDPOINT)
