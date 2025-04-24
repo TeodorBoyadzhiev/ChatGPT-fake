@@ -1,5 +1,6 @@
 import express from "express";
 import ImageKit from "imagekit";
+import cors from "cors";
 
 const port = process.env.PORT || 3000;
 const app = express();
