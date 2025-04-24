@@ -11,7 +11,7 @@ const safetySettings = [
   },
 ];
 
-const ai = new GoogleGenAI({ apiKey: "AIzaSyBwtqTzQojjuSyABBxkmzbHlbw4mY-ySj0" });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export async function main(text) {
   const response = await ai.models.generateContent({
