@@ -11,7 +11,6 @@ app.use(cors({
 
 // SDK initialization
 
-
 var imagekit = new ImageKit({
     urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
     publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
@@ -27,5 +26,3 @@ app.listen(port, () => {
 //   connect();
   console.log("Server running on 3000");
 });
-
-console.log(process.env.IMAGE_KIT_ENDPOINT)
