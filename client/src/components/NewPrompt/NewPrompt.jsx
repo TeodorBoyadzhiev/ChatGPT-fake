@@ -23,7 +23,7 @@ const NewPrompt = () => {
 
   const add = async (text) => {
     setQuestion(text);
-    setAnswer(main(text));
+    main(text, setAnswer)
   }
 
   const handleSubmit = async (e) => {
@@ -42,7 +42,7 @@ const NewPrompt = () => {
     {
       img.dbData?.filePath && (
         <IKImage
-          urlEndpoint={"https://ik.imagekit.io/6rb8jp8qk"}
+          urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
           path={img.dbData?.filePath}
           width="380"
           transformation={[{width: "380px"}]}

@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors({
-  origin: "http://127.0.0.1:5173",
+  origin: "http://localhost:5173",
 }));
 
 // SDK initialization

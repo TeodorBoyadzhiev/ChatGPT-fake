@@ -11,18 +11,33 @@ const safetySettings = [
   },
 ];
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+export const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_PUBLIC_KEY });
 
-export async function main(text) {
-  const response = await ai.models.generateContent({
+export async function main(text, setAnswer) {
+  const chat = ai.chats.create({
     model: "gemini-2.0-flash",
-    contents: text || "How does AI work?",
     config: {
       safetySettings: safetySettings,
     },
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
   });
-  console.log(response.text);
-  return response.text;
-}
 
-await main();
+  const stream1 = await chat.sendMessageStream({
+    message: text || "I have 2 dogs in my house.",
+  });
+
+  let accumutaledText = "";
+  for await (const chunk of stream1) {
+    accumutaledText += chunk.text;
+    setAnswer(accumutaledText);
+  }
+}
