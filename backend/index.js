@@ -110,6 +110,20 @@ app.get("/api/userchats", requireAuth(), async (req, res) => {
     res.status(500).send("Error fetching userchats!");
   }
 });
+
+app.get("/api/chats/:id", requireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+
+  try {
+    const chat = await Chat.findOne({ _id: req.params.id, userId });
+
+    res.status(200).send(chat);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error fetching chat!");
+  }
+});
+
 app.listen(port, () => {
   connect();
   console.log("Server running on 3000");

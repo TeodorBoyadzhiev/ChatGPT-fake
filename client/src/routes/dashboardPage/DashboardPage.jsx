@@ -20,7 +20,7 @@ const DashboardPage = () => {
     },
     onSuccess: (id) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["userChats"] });
+      queryClient.invalidateQueries({ queryKey: ["userchats"] });
       navigate(`/dashboard/chats/${id}`);
     },
   });
