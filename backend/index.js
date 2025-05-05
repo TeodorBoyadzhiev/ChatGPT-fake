@@ -3,13 +3,18 @@ import ImageKit from "imagekit";
 import cors from "cors";
 import mongoose from "mongoose";
 import * as data from "./util.js";
+import { clerkClient, getAuth, requireAuth } from '@clerk/express';
+import Chat from "./models/Chat.js";
+import UserChats from "./models/UserChats.js";
 
 const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL,
+  credentials: true
 }));
+app.use(express.json());
 
 const connect = () => {
     return new Promise((resolve, reject) => {
@@ -42,6 +47,69 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
+app.post("/api/chats", requireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+  const { text } = req.body;
+
+  try {
+    // CREATE A NEW CHAT
+    const newChat = new Chat({
+      userId: userId,
+      history: [{ role: "user", parts: [{ text }] }],
+    });
+
+    const savedChat = await newChat.save();
+
+    // CHECK IF THE USERCHATS EXISTS
+    const userChats = await UserChats.find({ userId: userId });
+
+    // IF DOESN'T EXIST CREATE A NEW ONE AND ADD THE CHAT IN THE CHATS ARRAY
+    if (!userChats.length) {
+      const newUserChats = new UserChats({
+        userId: userId,
+        chats: [
+          {
+            _id: savedChat._id,
+            title: text.substring(0, 40),
+          },
+        ],
+      });
+
+      await newUserChats.save();
+    } else {
+      // IF EXISTS, PUSH THE CHAT TO THE EXISTING ARRAY
+      await UserChats.updateOne(
+        { userId: userId },
+        {
+          $push: {
+            chats: {
+              _id: savedChat._id,
+              title: text.substring(0, 40),
+            },
+          },
+        }
+      );
+
+      res.status(201).send(newChat._id);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error creating chat!");
+  }
+});
+
+app.get("/api/userchats", requireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+
+  try {
+    const userChats = await UserChats.find({ userId });
+
+    res.status(200).send(userChats[0].chats);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error fetching userchats!");
+  }
+});
 app.listen(port, () => {
   connect();
   console.log("Server running on 3000");

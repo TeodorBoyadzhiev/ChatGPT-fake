@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@clerk/express": "^1.4.14",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "imagekit": "^5.0.1",
