@@ -13,7 +13,7 @@ const safetySettings = [
 
 export const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_PUBLIC_KEY });
 
-export async function main(text, setAnswer) {
+export async function main(text) {
   const chat = ai.chats.create({
     model: "gemini-2.0-flash",
     config: {
@@ -38,6 +38,7 @@ export async function main(text, setAnswer) {
   let accumutaledText = "";
   for await (const chunk of stream1) {
     accumutaledText += chunk.text;
-    setAnswer(accumutaledText);
   }
+
+  return accumutaledText;
 }

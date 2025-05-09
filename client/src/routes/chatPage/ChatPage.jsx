@@ -1,13 +1,14 @@
 import "./chatPage.css";
+import { Fragment } from 'react';
 import NewPrompt from "../../components/NewPrompt/NewPrompt";
-import Markdown from "react-markdown";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { IKImage } from "imagekitio-react";
 
 const ChatPage = () => {
-  const path = useLocation().pathname;
-  const chatId = path.split("/").pop();
+  const location = useLocation();
+  const chatId = location.pathname.split("/").pop();
+  const initialQuestion = location.state?.initialQuestion || "";
 
   const { isPending, error, data } = useQuery({
     queryKey: ["chats", chatId],
@@ -15,9 +16,8 @@ const ChatPage = () => {
       fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId}`, {
         credentials: "include",
       }).then((res) => res.json()),
+    staleTime: 10000
   });
-
-  console.log(data);
 
   return (
     <div className="chatPage">
@@ -28,7 +28,7 @@ const ChatPage = () => {
             : error
             ? "Something went wrong!"
             : data?.history?.map((message, i) => (
-                <>
+                <Fragment key={i}>
                   {message.img && (
                     <IKImage
                       urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
@@ -44,15 +44,13 @@ const ChatPage = () => {
                     className={
                       message.role === "user" ? "message user" : "message"
                     }
-                    key={i}
                   >
-                    <Markdown>{message.parts[0].text}</Markdown>
+                    <div>{message.parts[0]?.text}</div>
                   </div>
-                </>
+                </Fragment>
               ))}
 
-          {data && <NewPrompt data={data}/>}
-          <NewPrompt />
+          {data && <NewPrompt data={data} initialQuestion={initialQuestion}/>}
         </div>
       </div>
     </div>

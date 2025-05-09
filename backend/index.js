@@ -76,6 +76,7 @@ app.post("/api/chats", requireAuth(), async (req, res) => {
       });
 
       await newUserChats.save();
+      res.status(201).send(newChat._id);
     } else {
       // IF EXISTS, PUSH THE CHAT TO THE EXISTING ARRAY
       await UserChats.updateOne(
@@ -104,7 +105,7 @@ app.get("/api/userchats", requireAuth(), async (req, res) => {
   try {
     const userChats = await UserChats.find({ userId });
 
-    res.status(200).send(userChats[0].chats);
+    res.status(200).send(userChats[0]?.chats);
   } catch (err) {
     console.log(err);
     res.status(500).send("Error fetching userchats!");

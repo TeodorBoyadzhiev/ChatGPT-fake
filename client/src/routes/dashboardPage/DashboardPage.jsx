@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
   const queryClient = useQueryClient();
-
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -18,10 +17,10 @@ const DashboardPage = () => {
         body: JSON.stringify({ text }),
       }).then((res) => res.json());
     },
-    onSuccess: (id) => {
+    onSuccess: (id, text) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["userchats"] });
-      navigate(`/dashboard/chats/${id}`);
+      navigate(`/dashboard/chats/${id}`, { state: { initialQuestion: text } });
     },
   });
 
@@ -29,7 +28,7 @@ const DashboardPage = () => {
     e.preventDefault();
     const text = e.target.text.value;
     if (!text) return;
-
+  
     mutation.mutate(text);
   };
 
