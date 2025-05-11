@@ -3,6 +3,7 @@ import { IKImage } from 'imagekitio-react';
 import { main } from '../../lib/gemini';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Upload from '../upload/Upload';
+import TypingDots from '../TypingDots/TypingDots';
 import './newPrompt.css';
 
 const NewPrompt = ({data, initialQuestion }) => {
@@ -13,6 +14,8 @@ const NewPrompt = ({data, initialQuestion }) => {
     error: "",
     dbData: {}
   });
+  const [thinking, setThinking] = useState(false);
+
   const queryClient = useQueryClient();
   const endRef = useRef(null);
   const formRef = useRef(null);
@@ -71,8 +74,10 @@ const NewPrompt = ({data, initialQuestion }) => {
   const add = async (text, initialQuestion) => {
     if (!initialQuestion) {
       setQuestion(text);
+      setThinking(true);
       const result = await main(text);
       // const finalAnswer = typeof result === "string" ? result : result.text;
+      setThinking(false);
       setAnswer(result);
       mutation.mutate({answer: result, question: text});
     }
@@ -103,6 +108,7 @@ const NewPrompt = ({data, initialQuestion }) => {
       )}
       
       {question && <div className='message user'>{question}</div>}
+      {thinking && <TypingDots />}
       {answer && <div className='message'>{answer}</div>}
 
       <div className="endChat" ref={endRef}></div>
