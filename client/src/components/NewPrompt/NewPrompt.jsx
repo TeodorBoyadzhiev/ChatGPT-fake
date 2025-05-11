@@ -4,6 +4,7 @@ import { main } from '../../lib/gemini';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Upload from '../upload/Upload';
 import TypingDots from '../TypingDots/TypingDots';
+import ReactMarkdown from 'react-markdown';
 import './newPrompt.css';
 
 const NewPrompt = ({data, initialQuestion }) => {
@@ -109,7 +110,7 @@ const NewPrompt = ({data, initialQuestion }) => {
       
       {question && <div className='message user'>{question}</div>}
       {thinking && <TypingDots />}
-      {answer && <div className='message'>{answer}</div>}
+      {answer && <div className='message'><ReactMarkdown>{answer}</ReactMarkdown></div>}
 
       <div className="endChat" ref={endRef}></div>
         <form className="newForm" onSubmit={handleSubmit} ref={formRef}>

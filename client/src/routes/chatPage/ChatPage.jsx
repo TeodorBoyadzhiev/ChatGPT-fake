@@ -3,6 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { IKImage } from "imagekitio-react";
 import NewPrompt from "../../components/NewPrompt/NewPrompt";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "./chatPage.css";
 
 const ChatPage = () => {
@@ -47,7 +50,29 @@ const ChatPage = () => {
                       message.role === "user" ? "message user" : "message"
                     }
                   >
-                    <div>{message.parts[0]?.text}</div>
+                    <ReactMarkdown
+                      children={message.parts[0]?.text}
+                      components={{
+                        code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || "");
+                      
+                        return !inline && match ? (
+                            <SyntaxHighlighter
+                            style={oneDark}
+                            language={match[1]}
+                            PreTag="div"
+                            {...props}
+                            >
+                              {String(children).replace(/\n$/, "")}
+                            </SyntaxHighlighter>
+                            ) : (
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
+                          );
+                        },
+                      }}
+                    />
                   </div>
                 </Fragment>
               ))}

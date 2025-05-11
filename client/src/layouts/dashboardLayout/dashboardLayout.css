@@ -1,6 +1,6 @@
 .dashboardLayout {
   display: flex;
-  gap: 50px;
+  /* gap: 50px; */
   padding-top: 20px;
   height: 100%;
 
@@ -10,6 +10,6 @@
 
   .content {
     flex: 4;
-    background-color: #12101b;
+    background-color: #212121;
   }
 }
