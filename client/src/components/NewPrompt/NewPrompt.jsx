@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Upload from '../upload/Upload';
-import './newPrompt.css';
+import { useEffect, useRef, useState } from 'react';
 import { IKImage } from 'imagekitio-react';
 import { main } from '../../lib/gemini';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Upload from '../upload/Upload';
+import './newPrompt.css';
 
 const NewPrompt = ({data, initialQuestion }) => {
   const [question, setQuestion] = useState('');
@@ -27,7 +27,7 @@ const NewPrompt = ({data, initialQuestion }) => {
   useEffect(() => {
     if (initialQuestion && data?._id && !hasAskedInitialQuestion.current) {
       hasAskedInitialQuestion.current = true;
-      add(initialQuestion);
+      add(initialQuestion, hasAskedInitialQuestion.current);
     }
   }, [initialQuestion, data?._id]);
 
@@ -49,11 +49,11 @@ const NewPrompt = ({data, initialQuestion }) => {
       }).then((res) => res.json());
     },
     onSuccess: () => {
-      setQuestion("");
       queryClient
-        .invalidateQueries({ queryKey: ["chats", data._id] })
-        .then(() => {
-          formRef.current.reset();
+      .invalidateQueries({ queryKey: ["chats", data._id] })
+      .then(() => {
+        formRef.current.reset();
+          setQuestion("");
           setAnswer("");
           setImg({
             isLoading: false,
@@ -68,20 +68,23 @@ const NewPrompt = ({data, initialQuestion }) => {
     },
   });
 
-  const add = async (text) => {
-    setQuestion(text);
-    const result = await main(text);
-    setAnswer(result);
-    mutation.mutate({answer: result, question: text});
+  const add = async (text, initialQuestion) => {
+    if (!initialQuestion) {
+      setQuestion(text);
+      const result = await main(text);
+      // const finalAnswer = typeof result === "string" ? result : result.text;
+      setAnswer(result);
+      mutation.mutate({answer: result, question: text});
+    }
   }
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     const text = e.target.text.value;
 
     if (!text) return;
-
+    
     add(text);
   }
 
@@ -99,6 +102,7 @@ const NewPrompt = ({data, initialQuestion }) => {
         />
       )}
       
+      {question && <div className='message user'>{question}</div>}
       {answer && <div className='message'>{answer}</div>}
 
       <div className="endChat" ref={endRef}></div>

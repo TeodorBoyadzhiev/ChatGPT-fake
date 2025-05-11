@@ -4,7 +4,6 @@ import { ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton } from '@c
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './rootLayout.css';
 
-
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const queryClient = new QueryClient()
 

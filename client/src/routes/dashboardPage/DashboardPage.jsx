@@ -1,23 +1,24 @@
 import {useMutation, useQueryClient } from "@tanstack/react-query";
-import "./dashboardPage.css";
 import { useNavigate } from "react-router-dom";
+import { main } from '../../lib/gemini';
+import "./dashboardPage.css";
 
 const DashboardPage = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: async (text) => {
+    mutationFn: async ({text, answer}) => {
       return await fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, answer }),
       }).then((res) => res.json());
     },
-    onSuccess: (id, text) => {
+    onSuccess: (id, {text, answer}) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["userchats"] });
       navigate(`/dashboard/chats/${id}`, { state: { initialQuestion: text } });
@@ -28,8 +29,10 @@ const DashboardPage = () => {
     e.preventDefault();
     const text = e.target.text.value;
     if (!text) return;
-  
-    mutation.mutate(text);
+    
+    const answer = await main(text);
+
+    mutation.mutate({text, answer});
   };
 
   return (

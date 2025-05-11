@@ -1,9 +1,9 @@
-import "./chatPage.css";
 import { Fragment } from 'react';
-import NewPrompt from "../../components/NewPrompt/NewPrompt";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { IKImage } from "imagekitio-react";
+import NewPrompt from "../../components/NewPrompt/NewPrompt";
+import "./chatPage.css";
 
 const ChatPage = () => {
   const location = useLocation();
@@ -16,8 +16,10 @@ const ChatPage = () => {
       fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId}`, {
         credentials: "include",
       }).then((res) => res.json()),
-    staleTime: 10000
+    staleTime: 10000,
   });
+
+  console.log("ChatPage: ", data)
 
   return (
     <div className="chatPage">

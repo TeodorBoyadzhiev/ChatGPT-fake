@@ -6,6 +6,9 @@ import * as data from "./util.js";
 import { clerkClient, getAuth, requireAuth } from '@clerk/express';
 import Chat from "./models/Chat.js";
 import UserChats from "./models/UserChats.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -49,13 +52,13 @@ const connect = () => {
 
 app.post("/api/chats", requireAuth(), async (req, res) => {
   const userId = req.auth.userId;
-  const { text } = req.body;
+  const { text, answer } = req.body;
 
   try {
     // CREATE A NEW CHAT
     const newChat = new Chat({
       userId: userId,
-      history: [{ role: "user", parts: [{ text }] }],
+      history: [{ role: "user", parts: [{ text }] }, {role: "model", parts: [{ text: answer }]}],
     });
 
     const savedChat = await newChat.save();
@@ -105,7 +108,7 @@ app.get("/api/userchats", requireAuth(), async (req, res) => {
   try {
     const userChats = await UserChats.find({ userId });
 
-    res.status(200).send(userChats[0]?.chats);
+    res.status(200).send(userChats[0]?.chats || []);
   } catch (err) {
     console.log(err);
     res.status(500).send("Error fetching userchats!");
