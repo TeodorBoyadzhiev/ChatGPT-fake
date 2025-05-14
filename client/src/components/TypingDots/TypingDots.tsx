@@ -1,6 +1,7 @@
 import './TypingDots.css';
+import React from 'react';
 
-const TypingDots = () => {
+const TypingDots: React.FC = () => {
   return (
     <div className="typing">
       <span></span>

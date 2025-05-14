@@ -1,14 +1,42 @@
 import { Link } from "react-router-dom";
 import "./landingpage.css";
 import { TypeAnimation } from "react-type-animation";
-import { useState } from "react";
+import { useState, FC } from "react";
 
-const Homepage = () => {
-  const [typingStatus, setTypingStatus] = useState("human1");
+type TypingStatus = "human1" | "human2" | "bot";
+
+const Homepage: FC = () => {
+  const [typingStatus, setTypingStatus] = useState<TypingStatus>("human1");
+
+  const getImageSrc = (status: TypingStatus): string => {
+    switch (status) {
+      case "human1":
+        return "/human1.jpeg";
+      case "human2":
+        return "/human2.jpeg";
+      case "bot":
+        return "/bot.png";
+      default:
+        return "/bot.png";
+    }
+  };
+
+  const getAltText = (status: TypingStatus): string => {
+    switch (status) {
+      case "human1":
+        return "User Human 1";
+      case "human2":
+        return "User Human 2";
+      case "bot":
+        return "Chat Bot";
+      default:
+        return "Chat Image";
+    }
+  };
 
   return (
     <div className="homepage">
-      <img src="/orbital.png" alt="" className="orbital" />
+      <img src="/orbital.png" alt="Decorative Orbital Graphic" className="orbital" />
       <div className="left">
         <h1>LAMA AI</h1>
         <h2>Supercharge your creativity and productivity</h2>
@@ -23,41 +51,26 @@ const Homepage = () => {
           <div className="bgContainer">
             <div className="bg"></div>
           </div>
-          <img src="/bot.png" alt="" className="bot" />
+          <img src="/bot.png" alt="Robot illustration" className="bot" />
           <div className="chat">
             <img
-              src={
-                typingStatus === "human1"
-                  ? "/human1.jpeg"
-                  : typingStatus === "human2"
-                  ? "/human2.jpeg"
-                  : "bot.png"
-              }
-              alt=""
+              src={getImageSrc(typingStatus)}
+              alt={getAltText(typingStatus)}
             />
             <TypeAnimation
               sequence={[
-                // Same substring at the start will only be typed out once, initially
                 "Human:We produce food for Mice",
                 2000,
-                () => {
-                  setTypingStatus("bot");
-                },
+                () => setTypingStatus("bot"),
                 "Bot:We produce food for Hamsters",
                 2000,
-                () => {
-                  setTypingStatus("human2");
-                },
+                () => setTypingStatus("human2"),
                 "Human2:We produce food for Guinea Pigs",
                 2000,
-                () => {
-                  setTypingStatus("bot");
-                },
+                () => setTypingStatus("bot"),
                 "Bot:We produce food for Chinchillas",
                 2000,
-                () => {
-                  setTypingStatus("human1");
-                },
+                () => setTypingStatus("human1"),
               ]}
               wrapper="span"
               repeat={Infinity}
@@ -68,7 +81,7 @@ const Homepage = () => {
         </div>
       </div>
       <div className="terms">
-        <img src="/logo.png" alt="" />
+        <img src="/logo.png" alt="LAMA AI Logo" />
         <div className="links">
           <Link to="/">Terms of Service</Link>
           <span>|</span>
