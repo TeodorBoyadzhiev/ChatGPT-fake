@@ -129,8 +129,12 @@ app.get("/api/chats/:id", requireAuth(), async (req, res) => {
 });
 
 app.put("/api/chats/:id", requireAuth(), async (req, res) => {
+  const { id } = req.params;
+  if (!id || id === "undefined") {
+    return res.status(400).json({ error: "Invalid or missing chat ID" });
+  }
+  
   const userId = req.auth.userId;
-
   const { question, answer, img } = req.body;
 
   const newItems = [
