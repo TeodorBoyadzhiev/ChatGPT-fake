@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { IKImage } from "imagekitio-react";
@@ -25,7 +25,7 @@ interface LocationState {
   initialQuestion?: string;
 }
 
-const ChatPage = () => {
+const ChatPage: FC = () => {
   const location = useLocation();
   const chatId = location.pathname.split("/").pop() || "";
   
