@@ -14,17 +14,19 @@ const DashboardLayout: React.FC = () => {
     }
   }, [isLoaded, userId, navigate]);
 
-  if (!isLoaded) return <div>Loading...</div>;
-
   return (
-    <div className="dashboardLayout">
-      <div className="menu">
-        <Chatlist />
+    <> 
+      <div className="dashboardLayout">
+        {userId &&
+          <div className="menu">
+            <Chatlist />
+          </div>
+        }
+        <div className="content">
+          <Outlet />
+        </div>
       </div>
-      <div className="content">
-        <Outlet />
-      </div>
-    </div>
+    </>
   );
 };
 
