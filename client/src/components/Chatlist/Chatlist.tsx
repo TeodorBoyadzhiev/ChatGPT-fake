@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import "./chatList.css";
 
@@ -29,11 +29,11 @@ const ChatList = () => {
         {isLoading
           ? "Loading..."
           : error
-          ? "Something went wrong!"
-          : data?.map((chat) => (
-              <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
+            ? "Something went wrong!"
+            : data?.map((chat) => (
+              <NavLink to={`/dashboard/chats/${chat._id}`} key={chat._id} className={({ isActive }) => isActive ? "active" : ""}>
                 {chat.title}
-              </Link>
+              </NavLink>
             ))}
       </div>
       <hr />
