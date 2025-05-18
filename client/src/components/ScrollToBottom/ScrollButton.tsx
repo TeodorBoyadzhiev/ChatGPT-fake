@@ -17,7 +17,7 @@ const ScrollButton = ({ direction, scrollContainer, targetRef }: ScrollButtonPro
     const handleScroll = () => {
       const distanceFromBottom =
         container.scrollHeight - container.scrollTop - container.clientHeight;
-        
+
       if (direction === "down") {
         setVisible(distanceFromBottom > 50);
       } else if (direction === "up") {

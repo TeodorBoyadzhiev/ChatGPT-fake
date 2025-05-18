@@ -27,13 +27,12 @@
       line-height: 1.6;
       font-size: 16px;
       padding: 16px 20px;
-      background-color: #444654;
       color: #d1d5db;
       border-radius: 12px;
       max-width: 100%;
 
       &.user {
-        background-color: #2c2d31;
+        background-color: #303030;
         align-self: flex-end;
         text-align: right;
       }
@@ -43,10 +42,6 @@
       h3 {
         margin: 16px 0 8px;
         font-weight: 600;
-      }
-
-      p {
-        margin: 5px 0 0;
       }
 
       ul {
@@ -102,7 +97,7 @@
     }
 
     .endChat {
-      padding-bottom: 30px;
+      padding-bottom: 66px;
     }
   }
 

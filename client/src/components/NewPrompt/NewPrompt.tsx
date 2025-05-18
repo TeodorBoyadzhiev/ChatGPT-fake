@@ -43,12 +43,12 @@ const NewPrompt = ({ data, initialQuestion }: NewPromptProps) => {
 
   const queryClient = useQueryClient();
 
-  const endRef = useRef<HTMLDivElement | null>(null);
+  const questionRef = useRef<HTMLDivElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const hasAskedInitialQuestion = useRef<boolean>(false);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    questionRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [answer, question, img.dbData]);
 
   useEffect(() => {
@@ -133,15 +133,13 @@ const NewPrompt = ({ data, initialQuestion }: NewPromptProps) => {
         />
       )}
 
-      {question && <div className="message user">{question}</div>}
+      {question && <div className="message user" ref={questionRef}>{question}</div>}
       {thinking && <TypingDots />}
       {answer && (
         <div className="message">
           <ReactMarkdown>{answer}</ReactMarkdown>
         </div>
       )}
-
-      <div className="endChat" ref={endRef}></div>
 
       <form className="newForm" onSubmit={handleSubmit} ref={formRef}>
         <Upload setImg={setImg} />
