@@ -1,11 +1,13 @@
-import { Fragment, FC } from "react";
+import { Fragment, FC, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IKImage } from "imagekitio-react";
-import NewPrompt from "../../components/NewPrompt/NewPrompt";
-import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import ReactMarkdown from "react-markdown";
+
+import NewPrompt from "../../components/NewPrompt/NewPrompt";
+import ScrollButton from "../../components/ScrollToBottom/ScrollButton";
 import "./chatPage.css";
 
 // Типове
@@ -32,6 +34,9 @@ const ChatPage: FC = () => {
   const initialQuestion =
     (location.state as LocationState)?.initialQuestion || "";
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   const {
     isLoading,
     error,
@@ -45,9 +50,12 @@ const ChatPage: FC = () => {
     staleTime: 10000,
   });
 
+  console.log(document.body.scrollHeight);
+  console.log(document.body.clientHeight);
+
   return (
     <div className="chatPage">
-      <div className="wrapper">
+      <div className="wrapper" ref={scrollContainerRef}>
         <div className="chat">
           {isLoading ? (
             "Loading..."
@@ -100,8 +108,13 @@ const ChatPage: FC = () => {
           )}
 
           {data && <NewPrompt data={data} initialQuestion={initialQuestion} />}
+
+          <div className="endChat" ref={bottomRef}></div>
         </div>
+
       </div>
+      <ScrollButton direction="up" scrollContainer={scrollContainerRef} />
+      <ScrollButton direction="down" scrollContainer={scrollContainerRef} targetRef={bottomRef} />
     </div>
   );
 };
