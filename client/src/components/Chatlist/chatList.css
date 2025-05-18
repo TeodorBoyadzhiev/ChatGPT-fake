@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-right: 20px;
 
   hr {
     border: none;
@@ -23,12 +24,23 @@
     flex-direction: column;
     overflow: scroll;
     scrollbar-width: none;
+
+    .chat {
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+
+      a {
+        max-width: 207px;
+      }
+    }
   }
 
   a {
+    max-width: 210px;
     padding: 10px;
     border-radius: 10px;
-    
+
     &.active {
       background-color: #3c3748;
       color: white;

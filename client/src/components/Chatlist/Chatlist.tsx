@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import "./chatList.css";
+import MoreOptionsButton from "../MoreOptionsButton/MoreOptionsButton";
 
 type Chat = {
   _id: string;
@@ -31,9 +32,12 @@ const ChatList = () => {
           : error
             ? "Something went wrong!"
             : data?.map((chat) => (
+              <div className="chat" key={chat._id}>
               <NavLink to={`/dashboard/chats/${chat._id}`} key={chat._id} className={({ isActive }) => isActive ? "active" : ""}>
                 {chat.title}
               </NavLink>
+              <MoreOptionsButton />
+              </div>
             ))}
       </div>
       <hr />
