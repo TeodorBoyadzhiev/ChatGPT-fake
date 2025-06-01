@@ -34,9 +34,7 @@ const DropdownMenuButton = () => {
             </span>
 
             <div className={`dropdownMenu ${isOpen ? "show" : ""}`}>
-                <button onClick={() => alert("Опция 1")}>Опция 1</button>
-                <button onClick={() => alert("Опция 2")}>Опция 2</button>
-                <button onClick={() => alert("Изход")}>Изход</button>
+                <button onClick={() => alert("You are going to delete this chat")}>Delete</button>
             </div>
         </div>
     );
